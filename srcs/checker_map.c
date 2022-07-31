@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 14:38:23 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/07/30 19:30:11 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/01 01:44:39 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,39 @@ static int	ft_map_line(char *s)
 	return (i);
 }
 
+static int	is_good_value(char c)
+{
+	if ((c != '1') && (c != '0') && (c != 'E')
+		&& (c != 'P') && (c != 'C'))
+		return (0);
+	return (1);
+}
+
 int	checker_map_content(char	*map)
 {
 	int		fd_map;
 	int		i;
-	char	*read_map;
+	char	*buff;
 
 	fd_map = open(map, O_RDONLY);
-	read_map = get_next_line(fd_map);
+	buff = get_next_line(fd_map);
 	i = 0;
-	while (read_map)
+	while (buff)
 	{
 		i = 0;
-		while (read_map[i] != '\0' && read_map[i] != '\n')
+		while (buff[i] != '\0' && buff[i] != '\n')
 		{
-			if ((read_map[i] != '1') && (read_map[i] != '0')
-				&& (read_map[i] != 'E') && (read_map[i] != 'P')
-				&& (read_map[i] != 'C'))
+			if (is_good_value(buff[i]) == 0)
 			{
-				free(read_map);
-				return(0);
+				free(buff);
+				return (0);
 			}
 			i++;
 		}
-		free(read_map);
-		read_map = get_next_line(fd_map);
+		free(buff);
+		buff = get_next_line(fd_map);
 	}
-	free(read_map);
+	free(buff);
 	close(fd_map);
 	return (i);
 }
@@ -56,55 +62,82 @@ int	checker_map_content(char	*map)
 int	*checker_map_dimension(char	*map)
 {
 	int		fd_map;
-	char	*read_map;
+	char	*buff;
 	int		*dimension;
 
 	dimension = malloc(sizeof(int) * 2);
 	fd_map = open(map, O_RDONLY);
-	read_map = get_next_line(fd_map);
-	dimension[0] = ft_map_line(read_map);
+	buff = get_next_line(fd_map);
+	dimension[0] = ft_map_line(buff);
 	dimension[1] = 0;
-	while (read_map)
+	while (buff)
 	{
-		if (dimension[0] != ft_map_line(read_map))
+		if (dimension[0] != ft_map_line(buff))
 		{
 			free(dimension);
 			return (NULL);
 		}
-		read_map = get_next_line(fd_map);
+		buff = get_next_line(fd_map);
 		dimension[1] += 1;
 	}
-	free(read_map);
+	free(buff);
 	close(fd_map);
 	return (dimension);
 }
 
-char **ft_get_map(char	*map)
+/*
+** This function is to make sure the map left and right
+border is valide, then return t_map
+*/
+t_map	*ft_check_border_l_r(char	*map)
 {
-	int		fd_map;
-	char	*read_map;
-	char	**data_map;
-	char	*dimension;
+	t_map	*game_map;
 	int		i;
 
-	dimension = checker_map_dimension(map)
-	if (dimension == NULL)
+	game_map = malloc(sizeof(t_map) * 1);
+	game_map->dimension = checker_map_dimension(map);
+	if (game_map->dimension == NULL)
 		return (NULL);
-	data_map = malloc(sizeof(char *) * dimension[1]);
-	fd_map = open(map, O_RDONLY);
-	read_map = get_next_line(fd_map);
+	game_map->data = malloc(sizeof(char *) * game_map->dimension[1]);
+	game_map->fd = open(map, O_RDONLY);
+	game_map->line = get_next_line(game_map->fd);
 	i = 0;
-	while (read_map)
+	while (game_map->line)
 	{
-		if(read_map[0] != '1' && read_map[dimension[0] - 1] != '1')
+		if ((game_map->line[0] != '1')
+			|| game_map->line[game_map->dimension[0] - 1] != '1')
 		{
-			free(data_map);
-			free(dimension);
+			free(game_map);
 			return (NULL);
 		}
-		data_map[i] = read_map;
-		read_map = read_map = get_next_line(fd_map);
+		game_map->data[i] = game_map->line;
+		game_map->line = get_next_line(game_map->fd);
 		i++;
 	}
-	return (data_map);
+	return (game_map);
+}
+
+/*
+** This function return map data but make sure the map top
+and bottom border is valide before returning the data
+*/
+
+t_map	*ft_get_map(t_map	*game_map)
+{
+	int	i;
+
+	i = 0;
+	if (!game_map)
+		return (NULL);
+	while(i < game_map->dimension[0])
+	{
+		if ((game_map->data[0][i] != '1')
+			|| game_map->data[game_map->dimension[1] - 1][i] != '1')
+		{
+			free(game_map);
+			return (NULL);
+		}
+		i++;
+	}
+	return (game_map);
 }
