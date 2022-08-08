@@ -6,7 +6,7 @@
 #    By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/08 23:04:11 by fakouyat          #+#    #+#              #
-#    Updated: 2022/08/09 00:55:55 by fakouyat         ###   ########.fr        #
+#    Updated: 2022/08/09 00:59:18 by fakouyat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBS = ./libs/
 
 MLX = ./mlx/libmlx.a
 
-FT_PRINTF = $(LIBS)printf/libftprintf.a
+FT_PRINTF = $(LIBS)ft_printf/libftprintf.a
 
 GNL = $(LIBS)gnl/gnl.a
 
@@ -41,19 +41,19 @@ all : $(NAME)
 
 $(NAME) : 
 	make -C ./mlx/
-	make -C $(LIBS)printf/
+	make -C $(LIBS)ft_printf/
 	make -C $(LIBS)gnl/
 	$(CC) $(CFLAGS) main.c $(SRCS) $(MLX) $(FT_PRINTF) $(GNL) -framework OpenGl -framework AppKit -o $(NAME)
 
 clean :
 	make clean -C ./mlx
 	make clean -C $(LIBS)gnl
-	make clean -C $(LIBS)printf
+	make clean -C $(LIBS)ft_printf
 	rm -rf $(OBJ)
 	
 fclean : clean
 	make fclean -C $(LIBS)gnl
-	make fclean -C $(LIBS)printf
+	make fclean -C $(LIBS)ft_printf
 	rm -rf $(MLX)
 	rm -rf $(NAME)
 
