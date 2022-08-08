@@ -6,11 +6,11 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/07 01:31:34 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/08 12:09:29 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/08 22:56:21 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers.h"
+#include "../headers.h"
 
 void	ft_get_player_pos(char **map_data, t_player *player)
 {
@@ -54,5 +54,28 @@ void	ft_collect(t_vars *vars)
 	{
 		vars->player->collects -= 1;
 		vars->map->data[y][x] = '0';
+	}
+}
+
+void	ft_get_map_exit(t_map *game_map)
+{
+	int			i;
+	int			j;
+
+	j = 0;
+	while (game_map->data[j])
+	{
+		i = 0;
+		while (game_map->data[j][i] != '\0')
+		{
+			if (game_map->data[j][i] == 'E')
+			{
+				game_map->exit_x = i * 64;
+				game_map->exit_y = j * 64;
+				return ;
+			}
+			i++;
+		}
+		j++;
 	}
 }

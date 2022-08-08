@@ -1,1 +1,1 @@
-gcc main.c libmlx.a libftprintf.a libs/*.c srcs/*.c srcs/utils/*.c -framework OpenGl -framework AppKit -o so_long
+gcc main.c libmlx.a libftprintf.a gnl.a srcs/*.c -framework OpenGl -framework AppKit -o so_long

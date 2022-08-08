@@ -1,60 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
+/*   check_double_key.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/03 18:32:10 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/08 12:08:35 by fakouyat         ###   ########.fr       */
+/*   Created: 2022/08/08 21:48:29 by fakouyat          #+#    #+#             */
+/*   Updated: 2022/08/08 22:11:55 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers.h"
+#include "../headers.h"
 
-int	ft_map_line(char *s)
+int	ft_are_keys_repeat(t_map *game_map)
 {
-	int	i;
-
-	i = 0;
-	while (s[i] != '\0' && s[i] != '\n')
-		i++;
-	return (i);
-}
-
-int	ft_is_good_value(char c)
-{
-	if ((c != '1') && (c != '0') && (c != 'E')
-		&& (c != 'P') && (c != 'C'))
-		return (0);
-	return (1);
-}
-
-int	ft_is_rectangle(int *dimension)
-{
-	if (dimension[0] == dimension[1])
-		return (0);
-	return (1);
-}
-
-int	ft_count_collectable(t_map *game_map)
-{
+	int	keys[2];
 	int	i;
 	int	j;
-	int	nb;
 
+	keys[0] = 0;
+	keys[1] = 0;
 	j = 0;
-	nb = 0;
 	while (j < game_map->dimension[1])
 	{
 		i = 0;
 		while (i < game_map->dimension[0])
 		{
-			if (game_map->data[j][i] == 'C')
-				nb++;
+			if (game_map->data[j][i] == 'P')
+				keys[0] += 1;
+			if (game_map->data[j][i] == 'E')
+				keys[1] += 1;
+			if (keys[0] > 1 || keys[1] > 1)
+				return (0);
 			i++;
 		}
 		j++;
 	}
-	return (nb);
+	if (keys[0] == 1 && keys[1] == 1)
+		return (1);
+	return (0);
 }
