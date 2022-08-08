@@ -6,7 +6,7 @@
 #    By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/08 23:04:11 by fakouyat          #+#    #+#              #
-#    Updated: 2022/08/08 23:54:15 by fakouyat         ###   ########.fr        #
+#    Updated: 2022/08/08 23:56:27 by fakouyat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,9 +52,9 @@ clean :
 	rm -rf $(OBJ)
 	
 fclean : clean
-	make fclean -C ./mlx
 	make fclean -C $(LIBS)gnl
 	make fclean -C $(LIBS)ft_printf
+	rm -rf $(MLX)
 	rm -rf $(NAME)
 
 re : fclean all
