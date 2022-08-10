@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 14:38:23 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/07 00:38:42 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/10 23:42:47 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_checker_map_content(char	*map_path)
 
 	fd_map = open(map_path, O_RDONLY);
 	buff = get_next_line(fd_map);
+	if (!buff)
+		ft_exit_prog(106, NULL);
 	i = 0;
 	while (buff)
 	{
@@ -27,10 +29,7 @@ int	ft_checker_map_content(char	*map_path)
 		while (buff[i] != '\0' && buff[i] != '\n')
 		{
 			if (ft_is_good_value(buff[i]) == 0)
-			{
-				free(buff);
-				return (0);
-			}
+				ft_exit_prog(100, buff);
 			i++;
 		}
 		free(buff);
@@ -57,8 +56,9 @@ int	*ft_checker_map_dimension(char *map_path)
 		if (dimension[0] != ft_map_line(buff))
 		{
 			free(dimension);
-			return (NULL);
+			ft_exit_prog(101, buff);
 		}
+		free(buff);
 		buff = get_next_line(fd_map);
 		dimension[1] += 1;
 	}
@@ -77,25 +77,24 @@ t_map	*ft_check_border_l_r(char	*map_path)
 	int		i;
 
 	game_map = malloc(sizeof(t_map) * 1);
+	ft_init_map(game_map);
 	game_map->dimension = ft_checker_map_dimension(map_path);
-	if (game_map->dimension == NULL)
-		return (NULL);
-	game_map->data = malloc(sizeof(char *) * game_map->dimension[1]);
+	game_map->data = (char **)malloc(sizeof(char *) * game_map->dimension[1]);
 	game_map->fd = open(map_path, O_RDONLY);
-	game_map->line = get_next_line(game_map->fd);
 	i = 0;
-	while (game_map->line)
+	game_map->data[i] = get_next_line(game_map->fd);
+	while (game_map->data[i])
 	{
-		if ((game_map->line[0] != '1')
-			|| game_map->line[game_map->dimension[0] - 1] != '1')
+		if ((game_map->data[i][0] != '1')
+			|| game_map->data[i][game_map->dimension[0] - 1] != '1')
 		{
-			free(game_map);
-			return (NULL);
+			ft_free_map_elts(game_map, i + 1);
+			ft_exit_prog(102, game_map);
 		}
-		game_map->data[i] = game_map->line;
-		game_map->line = get_next_line(game_map->fd);
 		i++;
+		game_map->data[i] = get_next_line(game_map->fd);
 	}
+	close(game_map->fd);
 	return (game_map);
 }
 
@@ -108,16 +107,19 @@ t_map	*ft_get_map(t_map	*game_map)
 {
 	int	i;
 
+	if (ft_is_rectangle(game_map->dimension) == 0)
+	{
+		ft_free_map_elts(game_map, game_map->dimension[1]);
+		ft_exit_prog(104, game_map);
+	}
 	i = 0;
-	if (!game_map || ft_is_rectangle(game_map->dimension) == 0)
-		return (NULL);
 	while (i < game_map->dimension[0])
 	{
 		if ((game_map->data[0][i] != '1')
 			|| game_map->data[game_map->dimension[1] - 1][i] != '1')
 		{
-			free(game_map);
-			return (NULL);
+			ft_free_map_elts(game_map, game_map->dimension[1]);
+			ft_exit_prog(103, game_map);
 		}
 		i++;
 	}

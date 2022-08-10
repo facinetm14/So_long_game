@@ -6,33 +6,20 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 18:53:37 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/06 23:50:21 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/10 16:24:05 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers.h"
 
-t_map	*ft_check_map(char *map_path)
+t_map	*ft_read_map(char *map_path)
 {
 	t_map	*game_map;
 
 	if (ft_checker_map_content(map_path) == 0)
-	{
-		ft_printf("Error\nBad content in map");
-		return (NULL);
-	}
+		ft_exit_prog(100, NULL);
 	game_map = ft_check_border_l_r(map_path);
-	if (!game_map)
-	{
-		ft_printf("Error\nThe map should be bordered by wall");
-		return (NULL);
-	}
 	game_map = ft_get_map(game_map);
-	if (!game_map)
-	{
-		ft_printf("Error\nThe map should be bordered by wall");
-		return (NULL);
-	}
 	return (game_map);
 }
 

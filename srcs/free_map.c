@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_double_key.c                                 :+:      :+:    :+:   */
+/*   free_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/08 21:48:29 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/10 17:14:22 by fakouyat         ###   ########.fr       */
+/*   Created: 2022/08/09 11:34:09 by fakouyat          #+#    #+#             */
+/*   Updated: 2022/08/10 23:43:01 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers.h"
 
-int	ft_are_keys_repeat(t_map *game_map)
+void	ft_free_map_elts(t_map *game_map, int nb)
 {
-	int	keys[2];
-	int	i;
-	int	j;
+	int		i;
 
-	keys[0] = 0;
-	keys[1] = 0;
-	j = 0;
-	while (j < game_map->dimension[1])
+	i = 0;
+	while (i < nb)
 	{
-		i = 0;
-		while (i < game_map->dimension[0])
-		{
-			if (game_map->data[j][i] == 'P')
-				keys[0] += 1;
-			if (game_map->data[j][i] == 'E')
-				keys[1] += 1;
-			i++;
-		}
-		j++;
+		if (game_map->data[i])
+			free(game_map->data[i]);
+		i++;
 	}
-	if (keys[0] == 1 && keys[1] >= 1 && ft_count_collectable(game_map) >= 1)
-		return (1);
-	return (0);
+	free(game_map->data);
+	free(game_map->dimension);
+	close(game_map->fd);
 }
