@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 18:53:37 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/10 16:24:05 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/11 00:16:36 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_display_map(t_map *game_map, t_vars	*vars)
 	y = 0;
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, game_map->dimension[0] * 64,
-			game_map->dimension[1] * 64, "So_long");
+			game_map->dimension[1] * 64 + 32, "So_long");
 	while (y / 64 < game_map->dimension[1])
 	{
 		i = 0;

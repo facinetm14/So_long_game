@@ -105,5 +105,9 @@ void	ft_get_map_exit(t_map *game_map);
 
 /* utils.c */
 void	ft_init_map(t_map	*map_game);
+void	ft_put_step(t_vars *vars);
+
+/* ft_itoa.c*/
+char	*ft_itoa(int n);
 
 #endif

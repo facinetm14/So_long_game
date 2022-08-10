@@ -6,7 +6,7 @@
 #    By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/08 23:04:11 by fakouyat          #+#    #+#              #
-#    Updated: 2022/08/10 12:02:42 by fakouyat         ###   ########.fr        #
+#    Updated: 2022/08/11 00:40:50 by fakouyat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS = ./srcs/check_double_key.c\
 	./srcs/utils.c\
 	./srcs/errors.c\
 	./srcs/exit_prog.c\
-	./srcs/free_map.c
+	./srcs/free_map.c\
+	./srcs/ft_itoa.c
 
 OBJ = ${SRCS:.c=.o}
 
