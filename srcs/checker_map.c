@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 14:38:23 by fakouyat          #+#    #+#             */
-/*   Updated: 2022/08/10 23:42:47 by fakouyat         ###   ########.fr       */
+/*   Updated: 2022/08/11 02:11:56 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,16 @@ t_map	*ft_check_border_l_r(char	*map_path)
 	game_map->data = (char **)malloc(sizeof(char *) * game_map->dimension[1]);
 	game_map->fd = open(map_path, O_RDONLY);
 	i = 0;
-	game_map->data[i] = get_next_line(game_map->fd);
-	while (game_map->data[i])
+	while (i < game_map->dimension[1])
 	{
+		game_map->data[i] = get_next_line(game_map->fd);
 		if ((game_map->data[i][0] != '1')
-			|| game_map->data[i][game_map->dimension[0] - 1] != '1')
+			|| (game_map->data[i][game_map->dimension[0] - 1] != '1'))
 		{
 			ft_free_map_elts(game_map, i + 1);
 			ft_exit_prog(102, game_map);
 		}
 		i++;
-		game_map->data[i] = get_next_line(game_map->fd);
 	}
 	close(game_map->fd);
 	return (game_map);
@@ -116,7 +115,7 @@ t_map	*ft_get_map(t_map	*game_map)
 	while (i < game_map->dimension[0])
 	{
 		if ((game_map->data[0][i] != '1')
-			|| game_map->data[game_map->dimension[1] - 1][i] != '1')
+			|| (game_map->data[game_map->dimension[1] - 1][i]) != '1')
 		{
 			ft_free_map_elts(game_map, game_map->dimension[1]);
 			ft_exit_prog(103, game_map);
